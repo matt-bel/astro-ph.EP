@@ -3,7 +3,7 @@ import requests
 import json
 import os
 import arxiv
-
+from github import Github
 
 def get_authors(authors, first_author = False):
     output = str()
@@ -22,13 +22,6 @@ def sort_papers(papers):
     return output    
 
 def get_daily_papers(max_results=20):
-    """
-    @param topic: str
-    @param query: str
-    @return paper_with_code: dict
-    """
-
-    # output 
     content = dict() 
     content_to_web = dict()
 
@@ -42,9 +35,20 @@ def get_daily_papers(max_results=20):
     )
 
     count = 0
+    today = datetime.date.today()
+    dir = "./daily_papers/"+str(today.year) + "/" + str(today.month) + "/"
+    try:
+        os.makedirs(dir)
+    except(FileExistsError):
+        print("Made directory")
 
+    file = dir+str(today.day)+".md"
+
+    with open(file,"a+") as f:
+        f.write("---\n" + "layout: default\n" + "---\n\n")
+        
+        f.write("##ASTRO-PH.EP summary from " + str(today) + "\n\n")
     for result in search_engine.results():
-
         paper_id            = result.get_short_id()
         paper_title         = result.title
         paper_url           = result.entry_id
@@ -55,42 +59,30 @@ def get_daily_papers(max_results=20):
         publish_time        = result.published.date()
         update_time         = result.updated.date()
         comments            = result.comment
-
+        if ((today - update_time).days > 1):
+            break
 
       
         print("Time = ", update_time ,
               " title = ", paper_title,
               " author = ", paper_first_author)
+        
+        
+        file = dir+str(today.day)+".md"
 
-    #     # eg: 2108.09112v1 -> 2108.09112
-    #     ver_pos = paper_id.find('v')
-    #     if ver_pos == -1:
-    #         paper_key = paper_id
-    #     else:
-    #         paper_key = paper_id[0:ver_pos]    
+        with open(file,"a+") as f:
+            f.write("|Title | Authors | PDF Link | \n")
+            f.write("|:-----------------------|:---------|:------|\n")
+            f.write("|"+str(paper_title)+"|"+"|"+str(paper_first_author)+" et al.|"+"|"+str(paper_url)+"|\n")
+            f.write(paper_abstract)
+            f.write("\n ##Key Points: \n")
 
-    #     try:
-    #         r = requests.get(code_url).json()
-    #         # source code link
-    #         if "official" in r and r["official"]:
-    #             count += 1
-    #             repo_url = r["official"]["url"]
-    #             content[paper_key] = f"|**{update_time}**|**{paper_title}**|{paper_first_author} et.al.|[{paper_id}]({paper_url})|**[link]({repo_url})**|\n"
-    #             content_to_web[paper_key] = f"- {update_time}, **{paper_title}**, {paper_first_author} et.al., Paper: [{paper_url}]({paper_url}), Code: **[{repo_url}]({repo_url})**"
-
-    #         else:
-    #             content[paper_key] = f"|**{update_time}**|**{paper_title}**|{paper_first_author} et.al.|[{paper_id}]({paper_url})|null|\n"
-    #             content_to_web[paper_key] = f"- {update_time}, **{paper_title}**, {paper_first_author} et.al., Paper: [{paper_url}]({paper_url})"
-
-    #         # TODO: select useful comments
-    #         comments = None
-    #         if comments != None:
-    #             content_to_web[paper_key] = content_to_web[paper_key] + f", {comments}\n"
-    #         else:
-    #             content_to_web[paper_key] = content_to_web[paper_key] + f"\n"
-
-    #     except Exception as e:
-    #         print(f"exception: {e} with id: {paper_key}")
+            f.write(f"\n")
+            
+            #Add: back to top
+            top_info = f"#ASTRO-PH.EP summary from " + str(today)
+            top_info = top_info.replace(' ','-').replace('.','')
+            f.write(f"<p align=right>(<a href={top_info}>back to top</a>)</p>\n\n")
 
     # data = {topic:content}
     # data_web = {topic:content_to_web}
