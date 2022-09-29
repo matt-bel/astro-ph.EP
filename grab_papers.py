@@ -45,7 +45,7 @@ def get_daily_papers(max_results=400):
     file = dir+str(today.day)+".md"
 
     with open(file,"a+") as f:
-        f.write("## ASTRO-PH.EP summary from " + str(today) + "\n\n")
+        f.write("## ASTRO.PH.EP " + str(today) + "\n\n")
 
     for result in search_engine.results():
         paper_id            = result.get_short_id()
@@ -82,7 +82,7 @@ def get_daily_papers(max_results=400):
             f.write(paper_abstract)
             f.write("\n ### Key Points: \n")
             #Add: back to top
-            top_info = f"## ASTRO-PH.EP summary from " + str(today)
+            top_info = f"## ASTROPHEP-" + str(today)
             f.write(f"<p align=right>(<a href={top_info}>back to top</a>)</p>\n\n")
 
     # data = {topic:content}
