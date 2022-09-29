@@ -42,7 +42,7 @@ def get_daily_papers(max_results=400):
     except(FileExistsError):
         print("Made directory")
 
-    file = dir+str(today.day)+".md"
+    file = dir+str(today.day).replace('-','.')+".md"
 
     with open(file,"a+") as f:
         f.write("## ASTRO.PH.EP " + str(today) + "\n\n")
@@ -82,7 +82,7 @@ def get_daily_papers(max_results=400):
             f.write(paper_abstract)
             f.write("\n ### Key Points: \n")
             #Add: back to top
-            top_info = f"## ASTROPHEP-" + str(today)
+            top_info = f"## ASTROPHEP-" + str(today).replace('.','')
             f.write(f"<p align=right>(<a href={top_info}>back to top</a>)</p>\n\n")
 
     # data = {topic:content}
