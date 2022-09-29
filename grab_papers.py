@@ -21,7 +21,7 @@ def sort_papers(papers):
         output[key] = papers[key]
     return output    
 
-def get_daily_papers(max_results=20):
+def get_daily_papers(max_results=400):
     content = dict() 
     content_to_web = dict()
 
@@ -45,9 +45,8 @@ def get_daily_papers(max_results=20):
     file = dir+str(today.day)+".md"
 
     with open(file,"a+") as f:
-        f.write("---\n" + "layout: default\n" + "---\n\n")
-        
-        f.write("##ASTRO-PH.EP summary from " + str(today) + "\n\n")
+        f.write("## ASTRO-PH.EP summary from " + str(today) + "\n\n")
+
     for result in search_engine.results():
         paper_id            = result.get_short_id()
         paper_title         = result.title
@@ -59,8 +58,12 @@ def get_daily_papers(max_results=20):
         publish_time        = result.published.date()
         update_time         = result.updated.date()
         comments            = result.comment
+
+        print("Time = ", update_time ,
+              " title = ", paper_title,
+              " author = ", paper_first_author)
         if ((today - update_time).days > 1):
-            break
+            continue
 
       
         print("Time = ", update_time ,
@@ -73,14 +76,13 @@ def get_daily_papers(max_results=20):
         with open(file,"a+") as f:
             f.write("|Title | Authors | PDF Link | \n")
             f.write("|:-----------------------|:---------|:------|\n")
-            f.write("|"+str(paper_title)+"|"+"|"+str(paper_first_author)+" et al.|"+"|"+str(paper_url)+"|\n")
-            f.write(paper_abstract)
-            f.write("\n ##Key Points: \n")
-
+            f.write("|"+str(paper_title)+"|"+str(paper_first_author)+" et al.|"+str(paper_url)+"|\n")
             f.write(f"\n")
-            
+            f.write("## Abstract\n")
+            f.write(paper_abstract)
+            f.write("\n ## Key Points: \n")
             #Add: back to top
-            top_info = f"#ASTRO-PH.EP summary from " + str(today)
+            top_info = f"# ASTRO-PH.EP summary from " + str(today)
             top_info = top_info.replace(' ','-').replace('.','')
             f.write(f"<p align=right>(<a href={top_info}>back to top</a>)</p>\n\n")
 
