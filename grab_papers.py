@@ -21,7 +21,7 @@ def sort_papers(papers):
         output[key] = papers[key]
     return output    
 
-def get_daily_papers(max_results=400):
+def get_daily_papers(max_results=200):
     content = dict() 
     content_to_web = dict()
 
@@ -82,7 +82,7 @@ def get_daily_papers(max_results=400):
             f.write(paper_abstract)
             f.write("\n ### Key Points: \n")
             #Add: back to top
-            top_info = f"## ASTROPHEP-" + str(today).replace('-','')
+            top_info = f"#ASTROPHEP-" + str(today).replace('-','')
             f.write(f"<p align=right>(<a href={top_info}>back to top</a>)</p>\n\n")
 
     # data = {topic:content}
