@@ -78,12 +78,11 @@ def get_daily_papers(max_results=400):
             f.write("|:-----------------------|:---------|:------|\n")
             f.write("|"+str(paper_title)+"|"+str(paper_first_author)+" et al.|"+str(paper_url)+"|\n")
             f.write(f"\n")
-            f.write("## Abstract\n")
+            f.write("### Abstract\n")
             f.write(paper_abstract)
-            f.write("\n ## Key Points: \n")
+            f.write("\n ### Key Points: \n")
             #Add: back to top
-            top_info = f"# ASTRO-PH.EP summary from " + str(today)
-            top_info = top_info.replace(' ','-').replace('.','')
+            top_info = f"## ASTRO-PH.EP summary from " + str(today)
             f.write(f"<p align=right>(<a href={top_info}>back to top</a>)</p>\n\n")
 
     # data = {topic:content}
