@@ -35,7 +35,7 @@ def get_daily_papers(max_results=200):
     )
 
     count = 0
-    today = datetime.date.today()
+    today = datetime.date.today() - datetime.timedelta(days = 2)
     dir = "./daily_papers/"+str(today.year) + "/" + str(today.month) + "/"
     try:
         os.makedirs(dir)
@@ -62,7 +62,7 @@ def get_daily_papers(max_results=200):
         print("Time = ", update_time ,
               " title = ", paper_title,
               " author = ", paper_first_author)
-        if ((today - update_time).days > 1):
+        if ((today - update_time).days != 1):
             continue
 
       
