@@ -35,7 +35,7 @@ def get_daily_papers(max_results=200):
     )
 
     count = 0
-    today = datetime.date.today() - datetime.timedelta(days = 2)
+    today = datetime.date.today() #- datetime.timedelta(days = 2)
     dir = "./daily_papers/"+str(today.year) + "/" + str(today.month) + "/"
     try:
         os.makedirs(dir)
